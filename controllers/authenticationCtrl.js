@@ -57,4 +57,29 @@ async function loginCtrl(req, res) {
         status: "success"
     });
 }
-module.exports = { registrationCtrl, loginCtrl }
+
+async function getAllUser(req, res) {
+    try {
+        const users = await userSchema.find();
+
+        if (!users || users.length === 0) {
+            return res.status(404).json({
+                success: false,
+                message: "No users found"
+            });
+        }
+
+        res.status(200).json({
+            success: true,
+            message: "Users fetched successfully",
+            data: users
+        });
+    } catch (error) {
+        console.error("Error fetching users:", error);
+        res.status(500).json({
+            success: false,
+            message: "Server error while fetching users"
+        });
+    }
+}
+module.exports = { registrationCtrl, loginCtrl, getAllUser }
